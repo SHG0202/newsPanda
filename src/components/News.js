@@ -28,7 +28,11 @@ export class News extends Component {
     }
 
     async componentDidMount(){
-        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=3b82e334fb704e769b241d6e62656a20&page=1&pageSize=${this.props.pageSize}`
+        this.updateNews();
+    }
+
+    async updateNews() {
+        const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=3b82e334fb704e769b241d6e62656a20&page=${this.state.page}&pageSize=${this.props.pageSize}`
         this.setState({loading: true})
         let data = await fetch(url)
         let parsedData = await data.json()
@@ -40,30 +44,21 @@ export class News extends Component {
     }
 
     handlePrevClick = async () => {
-        
-        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=3b82e334fb704e769b241d6e62656a20&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`
-        this.setState({loading: true})
-        let data = await fetch(url)
-        let parsedData = await data.json()
+
         this.setState({
             page: this.state.page - 1,
-            articles: parsedData.articles,
-            loading: false
         })
+
+        this.updateNews()
     }
 
     handleNextClick = async () => {
-        
-            let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=3b82e334fb704e769b241d6e62656a20&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`
-            this.setState({loading: true})
-            let data = await fetch(url)
-            let parsedData = await data.json()
-            this.setState({loading: true})
-            this.setState({
-                page: this.state.page + 1,
-                articles: parsedData.articles,
-                loading: false
-            })
+
+        this.setState({
+            page: this.state.page + 1,
+        })
+
+        this.updateNews()
     }
 
     render() {
