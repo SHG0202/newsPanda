@@ -12,14 +12,15 @@ const News = (props) => {
     const [page, setPage] = useState(1)
     const [totalResults, setResults] = useState(0)
 
-    // document.title = `NewsPanda - ${capatilizeFirstLetter(props.category)} - Get your news in shots`
-
+    
     const capatilizeFirstLetter = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
     useEffect(() => {
         updateNews();
+        document.title = `NewsPanda - ${capatilizeFirstLetter(props.category)} - Get your news in shots`
+        // eslint-disable-next-line
     }, [])
 
     const updateNews = async () => {
@@ -54,8 +55,8 @@ const News = (props) => {
     // }
 
     const fetchMoreData = async () => {
+        const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page+1}&pageSize=${props.pageSize}`
         setPage(page + 1)
-        const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`
         let data = await fetch(url)
         let parsedData = await data.json()
         setArticles(articles.concat(parsedData.articles))
